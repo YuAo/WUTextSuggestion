@@ -132,7 +132,7 @@ static WUTextSuggestionDisplayController __weak *_activeTextSuggestionDisplayCon
 
 - (void)textSuggestionDisplayItemTapped:(WUTextSuggestionDisplayItem *)item {
     if (item.customActionBlock) {
-        item.customActionBlock();
+        item.customActionBlock(self.suggestionType,self.suggestionQuery,self.suggestionRange);
     } else {
         NSRange suggestionRange = self.suggestionRange;
         NSString *suggestionString = item.title;

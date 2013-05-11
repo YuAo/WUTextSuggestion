@@ -12,7 +12,7 @@
 @interface WUTextSuggestionDisplayItem : NSObject
 
 @property (nonatomic,copy,readonly)  NSString *title;
-@property (nonatomic,copy)           void     (^customActionBlock)(void);
+@property (nonatomic,copy)           void     (^customActionBlock)(WUTextSuggestionType suggestionType, NSString *suggestionQuery, NSRange suggestionRange);
 
 - (id)initWithTitle:(NSString *)title;
 
