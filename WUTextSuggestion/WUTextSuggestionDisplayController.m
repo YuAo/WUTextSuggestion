@@ -116,9 +116,11 @@ static WUTextSuggestionDisplayController __weak *_activeTextSuggestionDisplayCon
             }
         }
     };
-    if ([self.dataSource respondsToSelector:@selector(textSuggestionDisplayController:suggestionDisplayItemsForSuggestionType:query:callBack:)]) {
-        [self.dataSource textSuggestionDisplayController:self suggestionDisplayItemsForSuggestionType:self.suggestionType query:self.suggestionQuery callBack:^(NSArray *suggestionDisplayItems) {
-            showMenuControllerWithSuggestionDisplayItems(suggestionDisplayItems);
+    if ([self.dataSource respondsToSelector:@selector(textSuggestionDisplayController:suggestionDisplayItemsForSuggestionType:query:callback:)]) {
+        [self.dataSource textSuggestionDisplayController:self suggestionDisplayItemsForSuggestionType:self.suggestionType query:self.suggestionQuery callback:^(NSArray *suggestionDisplayItems) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                showMenuControllerWithSuggestionDisplayItems(suggestionDisplayItems); 
+            });
         }];
     } else if ([self.dataSource respondsToSelector:@selector(textSuggestionDisplayController:suggestionDisplayItemsForSuggestionType:query:)]) {
         showMenuControllerWithSuggestionDisplayItems([self.dataSource textSuggestionDisplayController:self suggestionDisplayItemsForSuggestionType:self.suggestionType query:self.suggestionQuery]);

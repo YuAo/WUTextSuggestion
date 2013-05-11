@@ -47,7 +47,7 @@
 - (void)textSuggestionDisplayController:(WUTextSuggestionDisplayController *)textSuggestionDisplayController
 suggestionDisplayItemsForSuggestionType:(WUTextSuggestionType)suggestionType
                                   query:(NSString *)suggestionQuery
-                               callBack:(void (^)(NSArray *suggestionDisplayItems))gotSuggestionDisplayItemsBlock;
+                               callback:(void (^)(NSArray *suggestionDisplayItems))gotSuggestionDisplayItemsBlock;
 
 @end
 
