@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, WUTextSuggestionType) {
-    WUTextSuggestionTypeNone = 0,
-    WUTextSuggestionTypeAt = 1 << 0
+    WUTextSuggestionTypeNone    = 0,
+    WUTextSuggestionTypeAt      = 1 << 0,
+    WUTextSuggestionTypeHashTag = 1 << 1
 };
 
 @interface WUTextSuggestionController : NSObject

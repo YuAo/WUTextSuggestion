@@ -99,7 +99,13 @@
             if (self.shouldReloadSuggestionsBlock) {
                 self.shouldReloadSuggestionsBlock(WUTextSuggestionTypeAt,rest,self.suggestionRange);
             }
-        }else{
+        } else if ([first isEqualToString:@"#"] && (self.suggestionType & WUTextSuggestionTypeHashTag)) {
+            self.suggesting = YES;
+            self.suggestionRange = NSMakeRange(range.location + 1, range.length - 1);
+            if (self.shouldReloadSuggestionsBlock) {
+                self.shouldReloadSuggestionsBlock(WUTextSuggestionTypeHashTag,rest,self.suggestionRange);
+            }
+        } else {
             self.suggestionRange = NSMakeRange(NSNotFound, 0);
             self.suggesting = NO;
         }
