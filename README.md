@@ -6,7 +6,7 @@ A text suggestion toolkit for iOS.
 
 ##What can it do?
 
-`WUTextSuggestion` is still early in development, it currently supports **@ (at)** and ** \# (hashtag, twitter style)** suggestions for `UITextView`.
+`WUTextSuggestion` is still early in development, it currently supports **@ (at)** and **\# (hashtag, twitter style)** suggestions for `UITextView`.
 
 ------
 
