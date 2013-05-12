@@ -14,7 +14,7 @@ _Download and run the demo project to see it in action._
 
 `WUTextSuggestion` aims to be a full featured text suggestion toolkit for iOS. 
 
-It can easily be integrate it in your project with only couple lines of code.
+It can easily be integrated in your project with only couple lines of code.
 
 It allows you to load text suggestions asynchronously from a remote server.
 
