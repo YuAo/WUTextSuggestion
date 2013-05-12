@@ -4,6 +4,8 @@ A text suggestion toolkit for iOS.
 
 ![ScreenShot](Screenshots/screenshot.png)
 
+_Download and run the demo project to see it in action._
+
 ##What can it do?
 
 `WUTextSuggestion` is still early in development, it currently supports **@ (at)** and **\# (hashtag, twitter style)** suggestions for `UITextView`.
