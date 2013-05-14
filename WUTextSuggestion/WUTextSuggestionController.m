@@ -24,10 +24,12 @@
 
 - (id)initWithTextView:(UITextView *)textView {
     if (self = [super init]) {
+        NSParameterAssert(textView);
         self.textView = textView;
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewTextDidChange:) name:UITextViewTextDidChangeNotification object:self.textView];
-        [self.textView addObserver:self forKeyPath:@"selectedTextRange" options:NSKeyValueObservingOptionNew context:NULL];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:self.textView];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidEndEditing:) name:UITextViewTextDidEndEditingNotification object:self.textView];
         
         self.textView.textSuggestionController = self;
     }
@@ -36,7 +38,6 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self.textView removeObserver:self forKeyPath:@"selectedTextRange"];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -47,6 +48,14 @@
 
 - (void)textViewTextDidChange:(NSNotification *)notification {
     [self textChanged];
+}
+
+- (void)textViewDidBeginEditing:(NSNotification *)notification {
+    [self.textView addObserver:self forKeyPath:@"selectedTextRange" options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+- (void)textViewDidEndEditing:(NSNotification *)notification {
+    [self.textView removeObserver:self forKeyPath:@"selectedTextRange"];
 }
 
 #pragma mark - 
