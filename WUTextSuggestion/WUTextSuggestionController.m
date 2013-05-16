@@ -52,10 +52,12 @@
 
 - (void)textViewDidBeginEditing:(NSNotification *)notification {
     [self.textView addObserver:self forKeyPath:@"selectedTextRange" options:NSKeyValueObservingOptionNew context:NULL];
+    [self textChanged];
 }
 
 - (void)textViewDidEndEditing:(NSNotification *)notification {
     [self.textView removeObserver:self forKeyPath:@"selectedTextRange"];
+    self.suggesting = NO;
 }
 
 #pragma mark - 
