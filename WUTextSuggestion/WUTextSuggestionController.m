@@ -15,7 +15,7 @@ NSString * const WUTextSuggestionControllerTextInputSelectedTextRangePropertyKey
 
 @property (nonatomic,weak,readwrite)          UITextView *textView;
 
-@property (nonatomic,strong)                  NSRegularExpression *checkingRegularExpression;
+@property (nonatomic,strong)                  NSRegularExpression *textCheckingRegularExpression;
 
 @property (nonatomic,readwrite,getter = isSuggesting) BOOL      suggesting;
 @property (nonatomic,readwrite)                       NSRange   suggestionRange;
@@ -91,21 +91,21 @@ NSString * const WUTextSuggestionControllerTextInputSelectedTextRangePropertyKey
     self.suggesting = NO;
 }
 
-- (NSRegularExpression *)checkingRegularExpression {
-    if (!_checkingRegularExpression) {
-        _checkingRegularExpression = [NSRegularExpression regularExpressionWithPattern:@"[@#]([^\\s:：@#]?)+$?" options:NSRegularExpressionCaseInsensitive error:NULL];
+- (NSRegularExpression *)textCheckingRegularExpression {
+    if (!_textCheckingRegularExpression) {
+        _textCheckingRegularExpression = [NSRegularExpression regularExpressionWithPattern:@"[@#]([^\\s/:：@#]?)+$?" options:NSRegularExpressionCaseInsensitive error:NULL];
     }
-    return _checkingRegularExpression;
+    return _textCheckingRegularExpression;
 }
 
 - (void)textChanged {
     __block NSString *word = nil;
     __block NSRange range = NSMakeRange(NSNotFound, 0);
     
-    [self.checkingRegularExpression enumerateMatchesInString:self.textView.text
-                                                     options:0
-                                                       range:NSMakeRange(0, self.textView.text.length)
-                                                  usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
+    [self.textCheckingRegularExpression enumerateMatchesInString:self.textView.text
+                                                         options:0
+                                                           range:NSMakeRange(0, self.textView.text.length)
+                                                      usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
     {
          NSRange textSelectedRange = self.textView.selectedRange;
          if (textSelectedRange.location > result.range.location && textSelectedRange.location <= result.range.location + result.range.length) {
