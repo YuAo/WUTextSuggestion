@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 
 NSString * const WUTextSuggestionControllerTextInputSelectedTextRangePropertyKey = @"selectedTextRange";
+NSString * const WUTextSuggestionControllerTextInputTextPropertyKey = @"text";
 
 @interface WUTextSuggestionController ()
 
@@ -21,6 +22,7 @@ NSString * const WUTextSuggestionControllerTextInputSelectedTextRangePropertyKey
 @property (nonatomic,readwrite)                       NSRange   suggestionRange;
 
 @property (nonatomic) BOOL observingSelectedTextRange;
+@property (nonatomic) BOOL observingTextInputText;
 
 @end
 
@@ -31,7 +33,7 @@ NSString * const WUTextSuggestionControllerTextInputSelectedTextRangePropertyKey
         NSParameterAssert(textView);
         self.textView = textView;
 
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewTextDidChange:) name:UITextViewTextDidChangeNotification object:self.textView];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged) name:UITextViewTextDidChangeNotification object:self.textView];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:self.textView];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidEndEditing:) name:UITextViewTextDidEndEditingNotification object:self.textView];
         
@@ -42,6 +44,7 @@ NSString * const WUTextSuggestionControllerTextInputSelectedTextRangePropertyKey
 
 - (void)dealloc {
     self.observingSelectedTextRange = NO;
+    self.observingTextInputText = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -71,23 +74,32 @@ NSString * const WUTextSuggestionControllerTextInputSelectedTextRangePropertyKey
     }
 }
 
+- (void)setObservingTextInputText:(BOOL)observingTextInputText {
+    if (_observingTextInputText != observingTextInputText) {
+        _observingTextInputText = observingTextInputText;
+        if (observingTextInputText) {
+            [self.textView addObserver:self forKeyPath:WUTextSuggestionControllerTextInputTextPropertyKey options:NSKeyValueObservingOptionNew context:NULL];
+        } else {
+            [self.textView removeObserver:self forKeyPath:WUTextSuggestionControllerTextInputTextPropertyKey];
+        }
+    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (object == self.textView && [keyPath isEqualToString:WUTextSuggestionControllerTextInputSelectedTextRangePropertyKey]) {
+    if (object == self.textView && ([keyPath isEqualToString:WUTextSuggestionControllerTextInputSelectedTextRangePropertyKey] || [keyPath isEqualToString:WUTextSuggestionControllerTextInputTextPropertyKey])) {
         [self textChanged];
     }
 }
 
-- (void)textViewTextDidChange:(NSNotification *)notification {
-    [self textChanged];
-}
-
 - (void)textViewDidBeginEditing:(NSNotification *)notification {
     self.observingSelectedTextRange = YES;
+    self.observingTextInputText = YES;
     [self textChanged];
 }
 
 - (void)textViewDidEndEditing:(NSNotification *)notification {
     self.observingSelectedTextRange = NO;
+    self.observingTextInputText = NO;
     self.suggesting = NO;
 }
 
