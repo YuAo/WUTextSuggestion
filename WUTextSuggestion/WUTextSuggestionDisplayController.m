@@ -168,20 +168,15 @@ static WUTextSuggestionDisplayController __weak *_activeTextSuggestionDisplayCon
 
 @end
 
-static void class_swizzleSelector(id object,SEL originalSEL,SEL swizzledSEL){
-    SEL originalSelector = originalSEL;
-    SEL swizzledSelector = swizzledSEL;
-    Method originalMethod = class_getInstanceMethod(object, originalSelector);
-    Method swizzledMethod = class_getInstanceMethod(object, swizzledSelector);
-    class_addMethod(object,
-                    originalSelector,
-                    class_getMethodImplementation(object, originalSelector),
-                    method_getTypeEncoding(originalMethod));
-    class_addMethod(object,
-                    swizzledSelector,
-                    class_getMethodImplementation(object, swizzledSelector),
-                    method_getTypeEncoding(swizzledMethod));
-    method_exchangeImplementations(originalMethod, swizzledMethod);
+static void class_swizzleSelector(Class class, SEL originalSelector, SEL newSelector)
+{
+    Method origMethod = class_getInstanceMethod(class, originalSelector);
+    Method newMethod = class_getInstanceMethod(class, newSelector);
+    if(class_addMethod(class, originalSelector, method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) {
+        class_replaceMethod(class, newSelector, method_getImplementation(origMethod), method_getTypeEncoding(origMethod));
+    } else {
+        method_exchangeImplementations(origMethod, newMethod);
+    }
 }
 
 @interface UITextView (WUTextSuggestionDisplayController)
