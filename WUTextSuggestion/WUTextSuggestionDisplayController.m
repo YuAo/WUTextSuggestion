@@ -43,12 +43,12 @@ NSString * const WUTextSuggestionDisplayItemAssociationKey = @"WUTextSuggestionD
 @end
 
 static SEL WUTextSuggestionDisplayControllerUIMenuControllerActionSelectorForMenuItemWithTitle(NSString *title) {
-    return NSSelectorFromString([NSString stringWithFormat:@"%@%x",WUTextSuggestionDisplayControllerUIMenuControllerActionSelectorPrefix,title.hash]);
+    return NSSelectorFromString([NSString stringWithFormat:@"%@%@",WUTextSuggestionDisplayControllerUIMenuControllerActionSelectorPrefix,@(title.hash).stringValue]);
 }
 
 static BOOL WUTextSuggestionDisplayControllerUIMenuControllerActionSelectorMatchesMenuItemTitle(SEL selector, NSString *title) {
     NSString *hash = [NSStringFromSelector(selector) stringByReplacingOccurrencesOfString:WUTextSuggestionDisplayControllerUIMenuControllerActionSelectorPrefix withString:@""];
-    if ([hash isEqualToString:[NSString stringWithFormat:@"%x",title.hash]]) {
+    if ([hash isEqualToString:@(title.hash).stringValue]) {
         return YES;
     } else {
         return NO;
